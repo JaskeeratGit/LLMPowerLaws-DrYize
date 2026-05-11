@@ -21,7 +21,7 @@ from vastai import VastAI
 
 SCRIPT_DIR = Path(__file__).parent
 # NVIDIA CUDA template (vastai/base-image)
-TEMPLATE_HASH = "3109ee3e3500e00a0e4ed073a6446be7"
+TEMPLATE_HASH = "3771d64fe404be8104d8180782435b48"
 DRIVER_VERSION_FILTER = "driver_version>=575.0.0"
 POLL_INTERVAL_SECONDS = 15
 MAX_WAIT_SECONDS = 600
@@ -118,13 +118,14 @@ def main():
     offer_id = input("\nOffer ID to launch: ").strip()
     storage = input("Storage in GB [default 50]: ").strip() or "50"
 
-    # ── Step 3: Build onstart_cmd from provisioning script ────────────────────
-    provisioning_path = SCRIPT_DIR / "provisioning_script.sh"
-    if not provisioning_path.exists():
-        sys.exit(f"Error: {provisioning_path} not found")
 
-    encoded_script = base64.b64encode(provisioning_path.read_bytes()).decode()
-    onstart_cmd = f"echo {encoded_script} | base64 -d | bash"
+    # # ── Step 3: Build onstart_cmd from provisioning script ────────────────────
+    # provisioning_path = SCRIPT_DIR / "provisioning_script.sh"
+    # if not provisioning_path.exists():
+    #     sys.exit(f"Error: {provisioning_path} not found")
+
+    # encoded_script = base64.b64encode(provisioning_path.read_bytes()).decode()
+    # onstart_cmd = f"echo {encoded_script} | base64 -d | bash"
 
     # ── Step 4: Launch instance ───────────────────────────────────────────────
     print("\n" + "=" * 62)
@@ -136,7 +137,6 @@ def main():
         id=int(offer_id),
         template_hash=TEMPLATE_HASH,
         disk=float(storage),
-        onstart_cmd=onstart_cmd,
         runtype="ssh",
     )
 
@@ -156,6 +156,7 @@ def main():
 
     wait_for_running(vast, instance_id)
     print("\nInstance is running!")
+
 
     # ── Step 6: SSH ───────────────────────────────────────────────────────────
     ## YOU MUST HAVE AN SSH KEY REGISTERED IN YOUR VAST.AI ACCOUNT FOR THIS.
