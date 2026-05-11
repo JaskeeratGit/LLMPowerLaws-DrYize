@@ -80,12 +80,8 @@ def wait_for_running(vast: VastAI, instance_id: int) -> dict:
 
 
 def main():
-    load_env(SCRIPT_DIR / ".env")
-    api_key = os.environ.get("VAST_API_KEY")
-    if not api_key:
-        sys.exit("Error: VAST_API_KEY not set in .env")
 
-    vast = VastAI(api_key=api_key)
+    vast = VastAI()
 
     # ── Step 1: Search for offers ─────────────────────────────────────────────
     print("=" * 62)
