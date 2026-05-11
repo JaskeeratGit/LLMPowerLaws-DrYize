@@ -1,0 +1,6 @@
+{
+  "datasets": ["lmsys", "sharegpt", "longbench"],
+  "lmsys_dataset": "lmsys/lmsys-chat-1m",
+  "sharegpt_dataset": "Aeala/ShareGPT_Vicuna_unfiltered",
+  "longbench_dataset": "THUDM/LongBench"
+}

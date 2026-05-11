@@ -4,6 +4,7 @@ version = "0.2.0"
 description = "Power-aware LLM/VLM serving benchmark using vLLM"
 requires-python = ">=3.12"
 dependencies = [
+    "aiohttp>=3.9.0",
     "datasets>=4.8.5",
     "huggingface>=0.0.1",
     "pandas>=3.0.3",
