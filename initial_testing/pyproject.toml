@@ -1,0 +1,25 @@
+[project] # type: ignore
+name = "ml-energy-benchmark"
+version = "0.1.0"
+description = "Power-aware LLM/VLM serving benchmark using vLLM"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets",
+    "huggingface-hub",
+    "evalplus",
+    "Pillow",
+    "numpy",
+    "pandas",
+    "tqdm",
+    "aiohttp",
+    "requests",
+    "openai",
+    "jsonlines",
+    "rich",
+    "typer",
+    "ipykernel>=7.2.0",
+    "dotenv>=0.9.9",
+]
+
+[tool.uv] # type: ignore
+required-version = ">=0.10.12"

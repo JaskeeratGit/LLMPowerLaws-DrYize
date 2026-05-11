@@ -1,0 +1,14 @@
+[project] # type: ignore
+name = "power-laws-benchmark"
+version = "0.2.0"
+description = "Power-aware LLM/VLM serving benchmark using vLLM"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets>=4.8.5",
+    "huggingface>=0.0.1",
+    "pandas>=3.0.3",
+    "vastai>=1.0.12",
+]
+
+[tool.uv] # type: ignore
+required-version = ">=0.10.12" # req version for uv
