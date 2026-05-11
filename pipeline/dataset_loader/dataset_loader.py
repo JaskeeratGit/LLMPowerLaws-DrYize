@@ -5,8 +5,14 @@ ShareGPT, and all prompts from LongBench (context + question).
 Requires HF_TOKEN in environment for gated datasets.
 """
 
+import json
 import os
+from pathlib import Path
+
 from datasets import load_dataset
+
+PROMPTS_PATH = Path(__file__).parent / "prompts.jsonl"
+CONFIG_PATH = Path(__file__).parent / "datasetConfig.json"
 
 LONGBENCH_SUBSETS = [
     "narrativeqa", "qasper", "multifieldqa_en", "hotpotqa", "2wikimqa",
@@ -40,7 +46,13 @@ def _extract_sharegpt_prompts(dataset_id: str, token: str | None) -> list[str]:
 def _extract_longbench_prompts(dataset_id: str, subsets: list[str], token: str | None) -> list[str]:
     prompts = []
     for subset in subsets:
-        ds = load_dataset(dataset_id, name=subset, token=token, split="test")
+        # Load parquet directly — avoids the deprecated LongBench.py dataset script
+        ds = load_dataset(
+            "parquet",
+            data_files={"test": f"hf://datasets/{dataset_id}/data/{subset}/test-*.parquet"},
+            split="test",
+            token=token,
+        )
         for row in ds:
             context = row.get("context", "").strip()
             question = row.get("input", "").strip()
@@ -77,3 +89,17 @@ def load_prompts(config: dict) -> list[str]:
             print(f"  +{len(new)} prompts (total {len(prompts)})")
 
     return prompts
+
+
+def save_prompts(prompts: list[str], path: Path = PROMPTS_PATH) -> None:
+    with open(path, "w") as f:
+        for prompt in prompts:
+            f.write(json.dumps({"prompt": prompt}) + "\n")
+    print(f"Saved {len(prompts)} prompts to {path}")
+
+
+if __name__ == "__main__":
+    with open(CONFIG_PATH) as f:
+        config = json.load(f)
+    prompts = load_prompts(config)
+    save_prompts(prompts)

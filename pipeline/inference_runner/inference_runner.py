@@ -27,11 +27,8 @@ from pathlib import Path
 
 import aiohttp
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from dataset_loader.dataset_loader import load_prompts  # noqa: E402
-
 VLLM_CONFIG_PATH = Path(__file__).parent.parent / "vllm_server_launcher" / "vllmConfig.json"
-DATASET_CONFIG_PATH = Path(__file__).parent.parent / "dataset_loader" / "datasetConfig.json"
+PROMPTS_PATH = Path(__file__).parent.parent / "dataset_loader" / "prompts.jsonl"
 RESULTS_DIR = Path(__file__).parent / "results"
 
 
@@ -197,12 +194,21 @@ async def run_inference(prompts: list[str], config: dict, results_path: Path):
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+def load_prompts_from_file(path: Path) -> list[str]:
+    if not path.exists():
+        sys.exit(
+            f"Error: {path} not found.\n"
+            "Run dataset_loader first: python pipeline/dataset_loader/dataset_loader.py"
+        )
+    with open(path) as f:
+        return [json.loads(line)["prompt"] for line in f if line.strip()]
+
+
 def main():
     vllm_config = load_json(VLLM_CONFIG_PATH)
-    dataset_config = load_json(DATASET_CONFIG_PATH)
 
-    print("Loading prompts...")
-    prompts = load_prompts(dataset_config)
+    print(f"Loading prompts from {PROMPTS_PATH}...")
+    prompts = load_prompts_from_file(PROMPTS_PATH)
     print(f"Total prompts: {len(prompts)}\n")
 
     model_slug = vllm_config["model"].replace("/", "_")
