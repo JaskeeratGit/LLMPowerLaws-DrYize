@@ -11,7 +11,6 @@ import os
 import sys
 import json
 import time
-import base64
 import subprocess
 from pathlib import Path
 from urllib.parse import urlparse
@@ -100,7 +99,7 @@ def main():
     if not offers:
         sys.exit("No offers found. Try relaxing your filters.")
 
-    offers_path = SCRIPT_DIR / "offers.json"
+    offers_path = "offers.json"
     with open(offers_path, "w") as f:
         json.dump(offers, f, indent=2)
 

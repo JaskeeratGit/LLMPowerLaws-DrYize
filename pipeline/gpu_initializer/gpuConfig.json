@@ -1,0 +1,6 @@
+{
+  "lock_sm_clock": true,
+  "sm_clock_mhz": 1500,
+  "lock_memory_clock": true,
+  "memory_clock_mhz": 5001
+}
